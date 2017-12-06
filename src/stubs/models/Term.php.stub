@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Models;
+
+class Term extends \Fomvasss\Taxonomy\Models\Term
+{
+    /**
+     * Пример который можно удалить
+     * Связь - терм "держит" много статтей
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function posts()
+    {
+        return $this->morphedByMany(Post::class, 'termable');
+    }
+}

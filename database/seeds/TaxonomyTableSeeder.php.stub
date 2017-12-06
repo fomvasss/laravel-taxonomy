@@ -1,0 +1,65 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+class TaxonomyTableSeeder extends Seeder
+{
+    protected $termModel = \Fomvasss\Taxonomy\Models\Term::class;
+
+    protected $vocabularyModel = \Fomvasss\Taxonomy\Models\Vocabulary::class;
+
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $taxonomyData = config('taxonomy-seeder.vocabularies');
+        if (! empty($taxonomyData)) {
+            $this->seedVocabularies($taxonomyData);
+            echo "Taxonomy seeder successful \n";
+        } else {
+            echo "File 'config/taxonomy-seeder.php' not found or empty. You must run: php artisan taxonomy:publish --seeder \n";
+        }
+    }
+
+    /**
+     * @param array $vocabularies
+     */
+    public function seedVocabularies(array $vocabularies)
+    {
+        foreach ($vocabularies as $item) {
+            $vocabulary = $this->vocabularyModel::create([
+                'system_name' => $item['system_name'],
+                'name' => $item['name'],
+                'description' => $item['description']
+            ]);
+
+            if (! empty($item['terms'])) {
+                $this->seedTerms($item['terms'], $vocabulary->id);
+            }
+        }
+    }
+
+    /**
+     * @param array $terms
+     * @param int $vocabularyId
+     * @param null $parentId
+     */
+    public function seedTerms(array $terms, int $vocabularyId, $parentId = null)
+    {
+        foreach ($terms as $item) {
+            $term = $this->termModel::create([
+                'name' => $item['name'],
+                'description' => $item['description'],
+                'vocabulary_id' => $vocabularyId,
+                'parent_id' => $parentId,
+            ]);
+
+            if (! empty($item['terms'])) {
+                $this->seedTerms($item['terms'], $vocabularyId, $term->id);
+            }
+        }
+    }
+}

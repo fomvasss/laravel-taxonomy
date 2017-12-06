@@ -1,0 +1,39 @@
+{
+    "name": "fomvasss/laravel-taxonomy",
+    "description": "Management of taxonomy in Laravel projects",
+    "type": "composer-package",
+    "keywords": [
+        "fomvasss",
+        "laravel-taxonomy",
+        "taxonomy",
+        "categories"
+    ],
+    "version": "1.0.0",
+    "homepage": "https://github.com/fomvasss/laravel-taxonomy",
+    "homepage": "https://bitbucket.org/fomvasss/laravel-taxonomy",
+    "authors": [
+        {
+            "name": "Vasyl Fomin",
+            "email": "fomvasss@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php" : ">=7.0.0",
+        "illuminate/support": "5.3.*|5.4.*|5.5.*",
+        "illuminate/database": "5.3.*|5.4.*|5.5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fomvasss\\Taxonomy\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fomvasss\\Taxonomy\\TaxonomyServiceProvider"
+            ]
+        }
+    }
+}
