@@ -41,13 +41,15 @@ class TaxonomyServiceProvider extends ServiceProvider
     protected function publishedConfig()
     {
         $configPath = __DIR__ . '/../config/taxonomy-seeder.php';
-        $this->publishes([$configPath => config_path('taxonomy-seeder.php')], 'config');
+        $this->publishes([$configPath => config_path('taxonomy-seeder.php')
+            ], 'taxonomy-config');
     }
 
     protected function makeSeeder()
     {
         $seedPath = __DIR__ . '/../database/seeds/TaxonomyTableSeeder.php.stub';
-        $this->publishes([$seedPath => database_path('seeds/TaxonomyTableSeeder.php')], 'seeder');
+        $this->publishes([$seedPath => database_path('seeds/TaxonomyTableSeeder.php')
+            ], 'taxonomy-seeder');
     }
 
     protected function makeMigrations()
@@ -55,9 +57,9 @@ class TaxonomyServiceProvider extends ServiceProvider
         if (! class_exists('CreateTaxonomiesTable')) {
             $timestamp = date('Y_m_d_His', time());
 
-            $migrationPath = __DIR__.'/../database/migrations/create_taxonomies_table.php.stub';
+            $migrationPath = __DIR__.'/../database/migrations/create_taxonomies_table.php';
             $this->publishes([$migrationPath => database_path('/migrations/' . $timestamp . '_create_taxonomies_table.php'),
-            ], 'migration');
+                ], 'taxonomy-migrations');
         }
     }
 
@@ -70,7 +72,7 @@ class TaxonomyServiceProvider extends ServiceProvider
             $this->publishes([
                 $modelPathStub . 'Term.php.stub' => $modelPath . 'Term.php',
                 $modelPathStub . 'Vocabulary.php.stub' => $modelPath . 'Vocabulary.php',
-            ], 'models');
+            ], 'taxonomy-models');
         }
     }
 

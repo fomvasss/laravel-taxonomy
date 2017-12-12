@@ -9,7 +9,7 @@
 "repositories": [
 	{
 		"type": "vcs",
-		"url": "git@bitbucket.org:fomvasss/laravel-taxonomy.git"
+		"getPath": "git@bitbucket.org:fomvasss/laravel-taxonomy.git"
 	}
 ]
 }
@@ -28,10 +28,10 @@
 
 ## Команды работы с пакетом
 ```bash
-	php artisan taxonomy:publish --migration --config --seeder --models --all
+	php artisan taxonomy:publish --migrations --config --seeder --models --all
 ```
 Опубликовать в соот. папки:
-`--migration` - миграцию
+`--migrations` - миграцию
 `--config` - конфиг (с тестовымы данными для сидера с таксономией)
 `--seeder` - сидер
 `--models` - модели `Vocabulary` и `Term` в `app/Models`
@@ -106,14 +106,14 @@ __Также в модель Term подключен ниже описанный
 ```php
 	App\Models\Term::find(1)->vocabulary;
 	
-	App\Models\Term::byVocabulary('categories')->get();
+	App\Models\Term::byVocabulary('categories')->getFile();
 
-	App\Models\Term::find(1)->hierarchyUp()->get();
+	App\Models\Term::find(1)->hierarchyUp()->getFile();
 	
-	App\Models\Post::with('categories')->get();
+	App\Models\Post::with('categories')->getFile();
 
 	App\Models\Post::byTaxonomies([
 		'categories' => [1,3,5],
 		'method-oplatu' => [3]
-	])->get();
+	])->getFile();
 ```

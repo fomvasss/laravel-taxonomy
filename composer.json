@@ -8,8 +8,6 @@
         "taxonomy",
         "categories"
     ],
-    "version": "1.0.0",
-    "homepage": "https://github.com/fomvasss/laravel-taxonomy",
     "homepage": "https://bitbucket.org/fomvasss/laravel-taxonomy",
     "authors": [
         {

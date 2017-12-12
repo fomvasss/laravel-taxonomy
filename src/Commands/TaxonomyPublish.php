@@ -13,7 +13,7 @@ use Illuminate\Console\Command;
 class TaxonomyPublish extends Command
 {
     protected $signature = 'taxonomy:publish
-            {--config} {--migration} {--seeder} {--models} {--all}';
+            {--config} {--migrations} {--seeder} {--models} {--all}';
 
     /**
      * The console command description.
@@ -69,7 +69,7 @@ class TaxonomyPublish extends Command
             foreach ($params as $value) {
                 $this->call('vendor:publish', [
                     '--provider' => TaxonomyServiceProvider::class,
-                    '--tag' => $value,
+                    '--tag' => 'taxonomy-' . $value,
                 ]);
             }
             exec('composer dump-autoload');
