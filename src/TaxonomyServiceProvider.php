@@ -20,12 +20,6 @@ class TaxonomyServiceProvider extends ServiceProvider
         $this->makeSeeder();
 
         $this->makeModels();
-
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                Commands\TaxonomyPublish::class,
-            ]);
-        }
     }
 
     /**

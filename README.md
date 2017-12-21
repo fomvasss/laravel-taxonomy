@@ -26,16 +26,10 @@
 	Fomvasss\Taxonomy\TaxonomyServiceProvider::class,
 ```
 
-## Команды работы с пакетом
+## Публикация ресурсов
 ```bash
-	php artisan taxonomy:publish --migrations --config --seeder --models --all
+	php artisan vendor:publish --provider="Fomvasss\Taxonomy\TaxonomyServiceProvider"
 ```
-Опубликовать в соот. папки:
-`--migrations` - миграцию
-`--config` - конфиг (с тестовымы данными для сидера с таксономией)
-`--seeder` - сидер
-`--models` - модели `Vocabulary` и `Term` в `app/Models`
-`--all` - все выше названное
 
 ```bash
 	php artisan migrate
@@ -82,7 +76,7 @@ __Также в модель Term подключен ниже описанный
 
 #### Scopes
 - termsByVocabulary() - Термы текущей модели по указанному словарю (по умолчанию ключ `system_name`). Не путать с связью `termsByVocabulary()`!
-- byTaxonomies() - Сущности по указанным термам с соответствующих указанных словарей
+- byTaxonomies() - Сущности по указанным термам с соответствующих указанных словарей (ключи по умолчанию term = `id`, vocabulary = `system_name`)
 
 Можно создавать в своих моделях свои, более удобные методы для связей, на основе метода `terms()`. 
 Например: модель статьи имеет термы-категории со словаря "Категории" (с ИД = 1) то связь "categories" можно настроить как в примере: 
