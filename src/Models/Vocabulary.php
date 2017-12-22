@@ -25,7 +25,8 @@ class Vocabulary extends Model
      */
     public function terms()
     {
-        return $this->hasMany(Term::class);
+        $related = config('taxonomy.models.term', Term::class);
+        return $this->hasMany($related);
     }
 
     /**
@@ -37,7 +38,8 @@ class Vocabulary extends Model
      */
     public function termsByMany()
     {
-        return $this->morphedByMany(Term::class, 'vocabularyable');
+        $related = config('taxonomy.models.term', Term::class);
+        return $this->morphedByMany($related, 'vocabularyable');
     }
 
     /**
@@ -49,6 +51,7 @@ class Vocabulary extends Model
      */
     public function vocabulariesByMany()
     {
-        return $this->morphedByMany(Vocabulary::class, 'vocabularyable');
+        $related = config('taxonomy.models.vocabulary', Vocabulary::class);
+        return $this->morphedByMany($related, 'vocabularyable');
     }
 }

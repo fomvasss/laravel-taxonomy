@@ -24,7 +24,8 @@ trait HasTaxonomyablesToMany
      */
     public function vocabulariesToMany()
     {
-        return $this->morphToMany(Vocabulary::class, 'vocabularyable');
+        $related = config('taxonomy.models.vocabulary', Vocabulary::class);
+        return $this->morphToMany($related, 'vocabularyable');
     }
 
     /**
@@ -35,6 +36,7 @@ trait HasTaxonomyablesToMany
      */
     public function termsToMany()
     {
-        return $this->morphToMany(Term::class, 'termable');
+        $related = config('taxonomy.models.term', Term::class);
+        return $this->morphToMany($related, 'termable');
     }
 }

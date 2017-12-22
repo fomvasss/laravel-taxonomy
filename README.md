@@ -1,5 +1,5 @@
-# Laravel taxonomy package
-
+# Laravel Taxonomy
+Создание и управление таксономиямы
 
 ## Установка
 
@@ -9,7 +9,7 @@
 "repositories": [
 	{
 		"type": "vcs",
-		"getPath": "git@bitbucket.org:fomvasss/laravel-taxonomy.git"
+		"url": "git@bitbucket.org:fomvasss/laravel-taxonomy.git"
 	}
 ]
 }
@@ -35,6 +35,8 @@
 	php artisan migrate
 	php artisan db:seed --class=TaxonomyTableSeeder
 ```
+
+__При использовании опубликованных кастомных моделей, нужно указать в конфигу `taxonomy.php` namespase этих моделей, иначе связи будут работать не корректно__
 
 ---
 ## Использование

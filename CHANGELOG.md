@@ -1,4 +1,8 @@
-# Changelog laravel-field-file
+# Changelog LaravelTaxonomy
+
+## 1.0.2 - 2017-12-22
+
+- Remove commands
 
 ## 1.0.1 - 2017-12-14
 

@@ -21,7 +21,8 @@ trait HasTaxonomies
      */
     public function terms()
     {
-        return $this->morphToMany(Term::class, 'termable');
+        $related = config('taxonomy.models.term', Term::class);
+        return $this->morphToMany($related, 'termable');
     }
 
     /**

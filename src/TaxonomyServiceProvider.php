@@ -30,13 +30,15 @@ class TaxonomyServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/taxonomy-seeder.php', 'taxonomy-seeder.php');
+        $this->mergeConfigFrom(__DIR__.'/../config/taxonomy.php', 'taxonomy.php');
     }
 
     protected function publishedConfig()
     {
-        $configPath = __DIR__ . '/../config/taxonomy-seeder.php';
-        $this->publishes([$configPath => config_path('taxonomy-seeder.php')
-            ], 'taxonomy-config');
+        $this->publishes([__DIR__ . '/../config/taxonomy-seeder.php' => config_path('taxonomy-seeder.php')
+            ], 'taxonomy-seeder-config');
+        $this->publishes([__DIR__ . '/../config/taxonomy.php' => config_path('taxonomy.php')
+        ], 'taxonomy-config');
     }
 
     protected function makeSeeder()
