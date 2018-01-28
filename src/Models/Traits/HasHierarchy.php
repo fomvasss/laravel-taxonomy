@@ -36,7 +36,7 @@ trait HasHierarchy
      */
     public function scopeHierarchyUp($query, bool $current = false)
     {
-        $query->where('root_parent_id', $this->root_parent_id)
+        $query->where('root_parent_id', $this->root_parent_id ?? $this->id)
             ->where('level', '>', $this->level);
 
         return $current ? $query->orWhere('id', $this->id) : $query; // + текущий элемент

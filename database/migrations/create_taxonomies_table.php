@@ -13,24 +13,23 @@ class CreateTaxonomiesTable extends Migration
      */
     public function up()
     {
-        $this->crateVocabulariesTable();
+        $this->createVocabulariesTable();
         echo "1. vocabularies table created \n";
 
-        $this->crateTermsTable();
+        $this->createTermsTable();
         echo "2. terms table created \n";
 
-        $this->crateVocabulariablesTable();
+        $this->createVocabulariablesTable();
         echo "3. vocabulariables table created \n";
 
-        $this->crateTermablesTable();
+        $this->createTermablesTable();
         echo "4. termables table created \n";
-
     }
 
     /**
      * Таблица словарей
      */
-    public function crateVocabulariesTable()
+    public function createVocabulariesTable()
     {
         Schema::create('vocabularies', function (Blueprint $table) {
             $table->increments('id');
@@ -47,7 +46,7 @@ class CreateTaxonomiesTable extends Migration
     /**
      * Таблица термов
      */
-    public function crateTermsTable()
+    public function createTermsTable()
     {
         Schema::create('terms', function (Blueprint $table) {
             $table->increments('id');
@@ -73,7 +72,7 @@ class CreateTaxonomiesTable extends Migration
     /**
      * Таблица сущностей "привязанных" к словарям
      */
-    public function crateVocabulariablesTable()
+    public function createVocabulariablesTable()
     {
         Schema::create('vocabularyables', function (Blueprint $table) {
             $table->integer('vocabulary_id')->unsigned();
@@ -86,14 +85,14 @@ class CreateTaxonomiesTable extends Migration
     /**
      * Таблица сущностей "привязанных" к термам
      */
-    public function crateTermablesTable()
+    public function createTermablesTable()
     {
-     Schema::create('termables', function (Blueprint $table) {
-         $table->integer('term_id')->unsigned();
-         $table->morphs('termable');
-
-         $table->foreign('term_id')->references('id')->on('terms')->onDelete('CASCADE')->onUpdate('CASCADE');
-     });
+         Schema::create('termables', function (Blueprint $table) {
+             $table->integer('term_id')->unsigned();
+             $table->morphs('termable');
+    
+             $table->foreign('term_id')->references('id')->on('terms')->onDelete('CASCADE')->onUpdate('CASCADE');
+         });
     }
 
     /**
