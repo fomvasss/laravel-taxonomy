@@ -1,19 +1,7 @@
 # Laravel Taxonomy
-Создание и управление таксономиямы
+Создание и управление таксономиями в Laravel
 
 ## Установка
-
-В `composer.json` на первый уровень добавать секцию:
-```json
-{
-"repositories": [
-	{
-		"type": "vcs",
-		"url": "git@bitbucket.org:fomvasss/laravel-taxonomy.git"
-	}
-]
-}
-```
 
 Запустить:
 ```bash
