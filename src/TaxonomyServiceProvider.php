@@ -29,14 +29,11 @@ class TaxonomyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/taxonomy-seeder.php', 'taxonomy-seeder');
         $this->mergeConfigFrom(__DIR__.'/../config/taxonomy.php', 'taxonomy');
     }
 
     protected function publishedConfig()
     {
-        $this->publishes([__DIR__ . '/../config/taxonomy-seeder.php' => config_path('taxonomy-seeder.php')
-            ], 'taxonomy-seeder-config');
         $this->publishes([__DIR__ . '/../config/taxonomy.php' => config_path('taxonomy.php')
         ], 'taxonomy-config');
     }
@@ -62,9 +59,9 @@ class TaxonomyServiceProvider extends ServiceProvider
     protected function makeModels()
     {
         $modelPathStub = __DIR__.'/stubs/models/';
-        $modelPath = $this->checkMakeDir(app_path('Models')) . '/';
+        $modelPath = $this->checkMakeDir(app_path('Models/Taxonomies')) . '/';
 
-        if (! class_exists('App\Models\Term') || ! class_exists('App\Models\Vocabulary')) {
+        if (! class_exists('App\Models\Term\Taxonomies') || ! class_exists('App\Models\Vocabulary\Taxonomies')) {
             $this->publishes([
                 $modelPathStub . 'Term.php.stub' => $modelPath . 'Term.php',
                 $modelPathStub . 'Vocabulary.php.stub' => $modelPath . 'Vocabulary.php',

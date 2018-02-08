@@ -12,6 +12,7 @@ class Vocabulary extends Model
         HasTaxonomyablesToMany;
 
     protected $fillable = [
+        'system_name',
         'name',
         'description',
         'body',

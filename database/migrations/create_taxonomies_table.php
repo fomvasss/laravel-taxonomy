@@ -36,7 +36,6 @@ class CreateTaxonomiesTable extends Migration
             $table->string('system_name')->unique();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('body')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -52,7 +51,6 @@ class CreateTaxonomiesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->text('body')->nullable();
             $table->integer('weight')->default(0);
 
             $table->integer('parent_id')->unsigned()->nullable();
