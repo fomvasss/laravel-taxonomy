@@ -51,6 +51,7 @@ class CreateTaxonomiesTable extends Migration
             $table->increments('id');
             $table->string('name');
 //            $table->string('slug')->nullable()->unique();
+//            $table->string('system_name')->nullable()->unique();
             $table->text('description')->nullable();
             $table->integer('weight')->default(0);
 

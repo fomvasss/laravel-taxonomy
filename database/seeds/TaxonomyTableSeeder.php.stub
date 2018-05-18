@@ -54,7 +54,7 @@ class TaxonomyTableSeeder extends Seeder
 
     /**
      * @param array $terms
-     * @param int $vocabularyId
+     * @param int $vocabulary
      * @param null $parentId
      */
     public function seedTerms(array $terms, $vocabulary, $parentId = null)
@@ -63,6 +63,7 @@ class TaxonomyTableSeeder extends Seeder
             $term = $this->termModel::create([
                 'name' => $item['name'],
                 //'slug' => $item['slug'] ?? str_slug($item['name']),
+                //'system_name' => !empty($item['system_name']) ? str_slug($item['system_name'], '_') : null,
                 'description' => $item['description'] ?? null,
                 'type' => $vocabulary->system_name,
                 'vocabulary_id' => $vocabulary->id,
