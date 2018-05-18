@@ -41,7 +41,7 @@ trait HasTaxonomies
     }
 
     /**
-     * Термы текущей модели по указанному словарю
+     * Термы текущей модели по указанному словарю.
      *
      * @param $query
      * @param $vocabulary
@@ -76,6 +76,7 @@ trait HasTaxonomies
             $terms = is_array($terms) ? $terms : [$terms];
             if (! empty($terms)) {
                 $query->whereHas('terms', function ($t) use ($vocabulary, $terms, $termKey, $vocabularyKey) {
+//                    $t->where('type', $vocabulary);
                     $t->whereHas('vocabulary', function ($v) use ($vocabulary, $terms, $termKey, $vocabularyKey) {
                         $v->where($vocabularyKey, $vocabulary);
                     })->whereIn($termKey, $terms);

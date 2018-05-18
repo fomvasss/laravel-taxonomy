@@ -6,6 +6,7 @@
         "fomvasss",
         "laravel-taxonomy",
         "taxonomy",
+        "terms",
         "categories"
     ],
     "homepage": "https://bitbucket.org/fomvasss/laravel-taxonomy",

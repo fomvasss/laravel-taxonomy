@@ -43,11 +43,11 @@ class TaxonomyTableSeeder extends Seeder
             $vocabulary = $this->vocabularyModel::create([
                 'system_name' => $item['system_name'],
                 'name' => $item['name'],
-                'description' => $item['description']
+                'description' => $item['description'] ?? null,
             ]);
 
             if (! empty($item['terms'])) {
-                $this->seedTerms($item['terms'], $vocabulary->id);
+                $this->seedTerms($item['terms'], $vocabulary);
             }
         }
     }
@@ -57,18 +57,20 @@ class TaxonomyTableSeeder extends Seeder
      * @param int $vocabularyId
      * @param null $parentId
      */
-    public function seedTerms(array $terms, int $vocabularyId, $parentId = null)
+    public function seedTerms(array $terms, $vocabulary, $parentId = null)
     {
         foreach ($terms as $item) {
             $term = $this->termModel::create([
                 'name' => $item['name'],
-                'description' => $item['description'],
-                'vocabulary_id' => $vocabularyId,
+                //'slug' => $item['slug'] ?? str_slug($item['name']),
+                'description' => $item['description'] ?? null,
+                'type' => $vocabulary->system_name,
+                'vocabulary_id' => $vocabulary->id,
                 'parent_id' => $parentId,
             ]);
 
             if (! empty($item['terms'])) {
-                $this->seedTerms($item['terms'], $vocabularyId, $term->id);
+                $this->seedTerms($item['terms'], $vocabulary, $term->id);
             }
         }
     }

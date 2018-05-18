@@ -11,12 +11,7 @@ class Vocabulary extends Model
     use SoftDeletes,
         HasTaxonomyablesToMany;
 
-    protected $fillable = [
-        'system_name',
-        'name',
-        'description',
-        'body',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * Связь:

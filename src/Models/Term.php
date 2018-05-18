@@ -15,14 +15,7 @@ class Term extends Model
         HasTaxonomyablesToMany,
         HasHierarchy;
 
-    protected $fillable = [
-        'name',
-        'description',
-        'body',
-        'weight',
-        'parent_id',
-        'vocabulary_id',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * Связь:

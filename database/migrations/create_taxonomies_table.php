@@ -50,13 +50,15 @@ class CreateTaxonomiesTable extends Migration
         Schema::create('terms', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+//            $table->string('slug')->nullable()->unique();
             $table->text('description')->nullable();
             $table->integer('weight')->default(0);
 
             $table->integer('parent_id')->unsigned()->nullable();
             $table->integer('root_parent_id')->unsigned()->nullable();
-            $table->integer('vocabulary_id')->unsigned();
             $table->integer('level')->default(1);
+            $table->integer('vocabulary_id')->unsigned();
+            $table->string('type'); //This is vocabulary system name - optional
 
             $table->timestamps();
 
