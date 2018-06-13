@@ -13,6 +13,8 @@ class Vocabulary extends Model
 
     protected $guarded = ['id'];
 
+    public $timestamps = false;
+
     /**
      * Связь:
      * Словарь имет много термов

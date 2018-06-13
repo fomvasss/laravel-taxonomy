@@ -12,8 +12,7 @@ class Term extends Model
 {
     use SoftDeletes,
         HasTaxonomies,
-        HasTaxonomyablesToMany,
-        HasHierarchy;
+        HasTaxonomyablesToMany;
 
     protected $guarded = ['id'];
 

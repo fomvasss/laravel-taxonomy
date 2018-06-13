@@ -1,5 +1,11 @@
 # Changelog LaravelTaxonomy
 
+## 2.0.0 - 2018-06-13
+
+- Remove default hierarchy (`HasHierarchy` trait && migration columns form terms)
+- Add method `term()` in `HasTaxonomies` trait
+- Update documentations
+
 ## 1.0.2 - 2017-12-22
 
 - Remove commands

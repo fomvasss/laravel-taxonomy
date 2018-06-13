@@ -14,16 +14,9 @@ class CreateTaxonomiesTable extends Migration
     public function up()
     {
         $this->createVocabulariesTable();
-        echo "1. vocabularies table created \n";
-
         $this->createTermsTable();
-        echo "2. terms table created \n";
-
         $this->createVocabulariablesTable();
-        echo "3. vocabulariables table created \n";
-
         $this->createTermablesTable();
-        echo "4. termables table created \n";
     }
 
     /**
@@ -37,7 +30,6 @@ class CreateTaxonomiesTable extends Migration
             $table->string('name');
             $table->text('description')->nullable();
 
-            $table->timestamps();
             $table->softDeletes();
         });
     }
@@ -54,19 +46,11 @@ class CreateTaxonomiesTable extends Migration
 //            $table->string('system_name')->nullable()->unique();
             $table->text('description')->nullable();
             $table->integer('weight')->default(0);
-
-            $table->integer('parent_id')->unsigned()->nullable();
-            $table->integer('root_parent_id')->unsigned()->nullable();
-            $table->integer('level')->default(1);
-            $table->integer('vocabulary_id')->unsigned();
-            $table->string('type'); //This is vocabulary system name - optional
-
+//            $table->nestedSet(); // _lft, _rgt, parent_id - only if you use "lazychaser/laravel-nestedset"
+            $table->unsignedInteger('vocabulary_id');
+            $table->string('type'); //This is vocabulary system name
             $table->timestamps();
-
             $table->softDeletes();
-            $table->foreign('vocabulary_id')->references('id')->on('vocabularies')->onDelete('CASCADE')->onUpdate('CASCADE');
-            $table->foreign('parent_id')->references('id')->on('terms')->onDelete('CASCADE')->onUpdate('CASCADE');
-            $table->foreign('root_parent_id')->references('id')->on('terms')->onDelete('CASCADE')->onUpdate('CASCADE');
         });
     }
 
@@ -76,7 +60,7 @@ class CreateTaxonomiesTable extends Migration
     public function createVocabulariablesTable()
     {
         Schema::create('vocabularyables', function (Blueprint $table) {
-            $table->integer('vocabulary_id')->unsigned();
+            $table->unsignedInteger('vocabulary_id');
             $table->morphs('vocabularyable');
 
             $table->foreign('vocabulary_id')->references('id')->on('vocabularies')->onDelete('CASCADE')->onUpdate('CASCADE');
@@ -89,7 +73,7 @@ class CreateTaxonomiesTable extends Migration
     public function createTermablesTable()
     {
          Schema::create('termables', function (Blueprint $table) {
-             $table->integer('term_id')->unsigned();
+             $table->unsignedInteger('term_id');
              $table->morphs('termable');
     
              $table->foreign('term_id')->references('id')->on('terms')->onDelete('CASCADE')->onUpdate('CASCADE');

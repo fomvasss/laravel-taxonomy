@@ -22,7 +22,23 @@ trait HasTaxonomies
     public function terms()
     {
         $related = config('taxonomy.models.term', Term::class);
+
         return $this->morphToMany($related, 'termable');
+    }
+
+    /**
+     * Связь:
+     * Сущность текущая модель "имеет" один терм
+     *
+     * @param null $foreignKey
+     * @param null $ownerKey
+     * @return mixed
+     */
+    public function term($foreignKey = null, $ownerKey = null)
+    {
+        $related = config('taxonomy.models.term', Term::class);
+
+        return $this->belongsTo($related, $foreignKey, $ownerKey);
     }
 
     /**
