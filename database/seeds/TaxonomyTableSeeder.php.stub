@@ -24,65 +24,22 @@ class TaxonomyTableSeeder extends Seeder
      */
     public function run()
     {
-        $taxonomyData = $this->getData();
-
-        if (! empty($taxonomyData)) {
-            $this->seedVocabularies($taxonomyData);
-            echo "Сид таксономии завершен успешно \n";
-        } else {
-            echo "Ошибка данных сида \n";
-        }
+        $this->seedVocabularies($this->getData());
     }
 
     /**
-     * @param array $vocabularies
+     * TODO:
+     * Specify the taxonomy structure you need.
+     *
+     * @return array
      */
-    public function seedVocabularies(array $vocabularies)
-    {
-        foreach ($vocabularies as $item) {
-            $vocabulary = $this->vocabularyModel::create([
-                'system_name' => $item['system_name'],
-                'name' => $item['name'],
-                'description' => $item['description'] ?? null,
-            ]);
-
-            if (! empty($item['terms'])) {
-                $this->seedTerms($item['terms'], $vocabulary);
-            }
-        }
-    }
-
-    /**
-     * @param array $terms
-     * @param int $vocabulary
-     * @param null $parentId
-     */
-    public function seedTerms(array $terms, $vocabulary, $parentId = null)
-    {
-        foreach ($terms as $item) {
-            $term = $this->termModel::create([
-                'name' => $item['name'],
-                //'slug' => $item['slug'] ?? str_slug($item['name']),
-                //'system_name' => !empty($item['system_name']) ? str_slug($item['system_name'], '_') : null,
-                'description' => $item['description'] ?? null,
-                'type' => $vocabulary->system_name,
-                'vocabulary_id' => $vocabulary->id,
-                'parent_id' => $parentId,
-            ]);
-
-            if (! empty($item['terms'])) {
-                $this->seedTerms($item['terms'], $vocabulary, $term->id);
-            }
-        }
-    }
-
     public function getData()
     {
         return [
                 [
-                   'system_name' => 'categories',
-                   'name' => 'Категории',
-                   'description' => 'Словарь категорий сайта',
+                   'system_name' => 'product_categories',
+                   'name' => 'Категории товаров',
+                   'description' => 'Словарь категорий товаров магазина',
                    'terms' => [
                        [
                            'name' => 'Автоэлектроника',
@@ -126,20 +83,83 @@ class TaxonomyTableSeeder extends Seeder
                    'name' => 'Единицы измерения количества',
                    'description' => 'Словарь едениц измерения количества товаров/услуг',
                    'terms' => [
-                       ['name' => 'см.', 'description' => 'сантиметров'],
-                       ['name' => 'т.', 'description' => 'тонн'],
-                       ['name' => 'шт.', 'description' => 'штук'],
+                       ['name' => 'см.', 'description' => 'сантиметров', 'slug' => ''],
+                       ['name' => 'т.', 'description' => 'тонн', 'slug' => ''],
+                       ['name' => 'шт.', 'description' => 'штук', 'slug' => ''],
                    ],
                 ],
                 [
-                   'system_name' => 'payment-methods',
+                   'system_name' => 'payment_methods',
                    'name' => 'Способы оплаты',
                    'description' => 'Словарь способов оплаты товаров/услуг',
                    'terms' => [
-                       ['name' => 'предоплата', 'description' => 'оплата проводится наперед'],
-                       ['name' => 'оплата при получении', 'description' => 'оплата проводится при получении товара'],
+                       ['name' => 'предоплата', 'description' => 'оплата проводится наперед', 'system_name' => 'pay_predoplata', 'slug' => ''],
+                       ['name' => 'оплата при получении', 'description' => 'оплата проводится при получении товара', 'system_name' => 'pay_pri_poluchenii', 'slug' => ''],
+                   ],
+                ],
+                [
+                   'system_name' => 'post_statuses',
+                   'name' => 'Статусы объявлений',
+                   'description' => 'Статусы модерации объявлений',
+                   'terms' => [
+                       ['name' => 'На модерации', 'description' => 'Обявление находится на модерации', 'system_name' => 'post_moderation', 'slug' => ''],
+                       ['name' => 'Опубликовано', 'description' => 'Обявление успешно опубликовано', 'system_name' => 'post_published', 'slug' => ''],
+                       ['name' => 'Отклонено', 'description' => 'Обявление отклонено для публикации', 'system_name' => 'post_rejected', 'slug' => ''],
+                       ['name' => 'В архиве', 'description' => 'Обявление находится в архиве', 'system_name' => 'post_archived', 'slug' => ''],
+                   ],
+                ],
+                [
+                   'system_name' => 'payment_statuses',
+                   'name' => 'Статусы оплат',
+                   'description' => 'Статусы оплат услуг на сайте',
+                   'terms' => [
+                       ['name' => 'Новый платеж', 'system_name' => 'payment_new', 'slug' => ''],
+                       ['name' => 'Платеж подтвежден', 'system_name' => 'payment_success', 'slug' => ''],
+                       ['name' => 'Платеж отклонен', 'system_name' => 'payment_rejected', 'slug' => ''],
                    ],
                 ],
         ];
+    }
+
+    /**
+     * @param array $vocabularies
+     */
+    public function seedVocabularies(array $vocabularies)
+    {
+        foreach ($vocabularies as $item) {
+            $vocabulary = $this->vocabularyModel::create([
+                'system_name' => $item['system_name'],
+                'name' => $item['name'],
+                'description' => $item['description'] ?? null,
+            ]);
+
+            if (! empty($item['terms'])) {
+                $this->seedTerms($item['terms'], $vocabulary);
+            }
+        }
+    }
+
+    /**
+     * @param array $terms
+     * @param int $vocabulary
+     * @param null $parentId
+     */
+    public function seedTerms(array $terms, $vocabulary, $parentId = null)
+    {
+        foreach ($terms as $item) {
+            $term = $this->termModel::create([
+                'name' => $item['name'],
+                //'slug' => (isset($item['slug']) && $item['slug'] === '') ? null : str_slug($item['slug']),
+                //'system_name' => !empty($item['system_name']) ? str_slug($item['system_name'], '_') : null,
+                'description' => $item['description'] ?? null,
+                'type' => $vocabulary->system_name,
+                'vocabulary_id' => $vocabulary->id,
+                'parent_id' => $parentId,
+            ]);
+
+            if (! empty($item['terms'])) {
+                $this->seedTerms($item['terms'], $vocabulary, $term->id);
+            }
+        }
     }
 }

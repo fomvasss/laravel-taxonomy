@@ -10,8 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Term extends Model
 {
-    use SoftDeletes,
-        HasTaxonomies,
+    use HasTaxonomies,
         HasTaxonomyablesToMany;
 
     protected $guarded = ['id'];

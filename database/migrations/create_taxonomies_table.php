@@ -29,8 +29,6 @@ class CreateTaxonomiesTable extends Migration
             $table->string('system_name')->unique();
             $table->string('name');
             $table->text('description')->nullable();
-
-            $table->softDeletes();
         });
     }
 
@@ -42,15 +40,14 @@ class CreateTaxonomiesTable extends Migration
         Schema::create('terms', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->text('description')->nullable();
 //            $table->string('slug')->nullable()->unique();
 //            $table->string('system_name')->nullable()->unique();
-            $table->text('description')->nullable();
+//            $table->nestedSet(); // _lft, _rgt, parent_id - need if you use "lazychaser/laravel-nestedset"
             $table->integer('weight')->default(0);
-//            $table->nestedSet(); // _lft, _rgt, parent_id - only if you use "lazychaser/laravel-nestedset"
             $table->unsignedInteger('vocabulary_id');
-            $table->string('type'); //This is vocabulary system name
+            $table->string('type'); // This is vocabulary system name
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

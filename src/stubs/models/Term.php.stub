@@ -5,6 +5,7 @@ namespace App\Models\Taxonomies;
 class Term extends \Fomvasss\Taxonomy\Models\Term
 {
     /**
+     * TODO:
      * Пример который можно удалить
      * Связь - терм "держит" много статтей
      *

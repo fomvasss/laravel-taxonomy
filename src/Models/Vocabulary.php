@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vocabulary extends Model
 {
-    use SoftDeletes,
-        HasTaxonomyablesToMany;
+    use HasTaxonomyablesToMany;
 
     protected $guarded = ['id'];
 
