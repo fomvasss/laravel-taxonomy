@@ -14,13 +14,16 @@ class CreateTaxonomiesTable extends Migration
     public function up()
     {
         $this->createVocabulariesTable();
+        
         $this->createTermsTable();
+        
         $this->createVocabulariablesTable();
+        
         $this->createTermablesTable();
     }
 
     /**
-     * Таблица словарей
+     * Taxonomy vocabularies table
      */
     public function createVocabulariesTable()
     {
@@ -29,11 +32,12 @@ class CreateTaxonomiesTable extends Migration
             $table->string('system_name')->unique();
             $table->string('name');
             $table->text('description')->nullable();
+//            $table->json('additionally')->nullable();
         });
     }
 
     /**
-     * Таблица термов
+     * Taxonomy terms table
      */
     public function createTermsTable()
     {
@@ -41,12 +45,18 @@ class CreateTaxonomiesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description')->nullable();
-//            $table->string('slug')->nullable()->unique();
-//            $table->string('system_name')->nullable()->unique();
-//            $table->nestedSet(); // _lft, _rgt, parent_id - need if you use "lazychaser/laravel-nestedset"
+            $table->string('system_name')->nullable()->unique(); # if needed, ex. from statuses
+
+            $table->nestedSet(); //Nested https://github.com/lazychaser/laravel-nestedset
+            // Similar:
+            /*
+            $table->unsignedInteger('_lft')->default(0);
+            $table->unsignedInteger('_rgt')->default(0);
+            $table->unsignedInteger('parent_id')->nullable();
+            */
+
             $table->integer('weight')->default(0);
-            $table->unsignedInteger('vocabulary_id');
-            $table->string('type'); // This is vocabulary system name
+            $table->string('vocabulary');
             $table->timestamps();
         });
     }
@@ -60,7 +70,10 @@ class CreateTaxonomiesTable extends Migration
             $table->unsignedInteger('vocabulary_id');
             $table->morphs('vocabularyable');
 
-            $table->foreign('vocabulary_id')->references('id')->on('vocabularies')->onDelete('CASCADE')->onUpdate('CASCADE');
+            $table->foreign('vocabulary_id')
+                ->references('id')
+                ->on('vocabularies')
+                ->onDelete('CASCADE');
         });
     }
 
@@ -73,7 +86,10 @@ class CreateTaxonomiesTable extends Migration
              $table->unsignedInteger('term_id');
              $table->morphs('termable');
     
-             $table->foreign('term_id')->references('id')->on('terms')->onDelete('CASCADE')->onUpdate('CASCADE');
+             $table->foreign('term_id')
+                 ->references('id')
+                 ->on('terms')
+                 ->onDelete('CASCADE');
          });
     }
 

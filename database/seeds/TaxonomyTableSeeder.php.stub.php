@@ -149,11 +149,9 @@ class TaxonomyTableSeeder extends Seeder
         foreach ($terms as $item) {
             $term = $this->termModel::create([
                 'name' => $item['name'],
-                //'slug' => (isset($item['slug']) && $item['slug'] === '') ? null : str_slug($item['slug']),
-                //'system_name' => !empty($item['system_name']) ? str_slug($item['system_name'], '_') : null,
+                'system_name' => !empty($item['system_name']) ? str_slug($item['system_name'], '_') : null,
                 'description' => $item['description'] ?? null,
-                'type' => $vocabulary->system_name,
-                'vocabulary_id' => $vocabulary->id,
+                'vocabulary' => $vocabulary->system_name,
                 'parent_id' => $parentId,
             ]);
 

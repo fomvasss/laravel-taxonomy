@@ -2,16 +2,17 @@
 
 namespace Fomvasss\Taxonomy\Models;
 
-use Fomvasss\Taxonomy\Models\Traits\HasHierarchy;
 use Fomvasss\Taxonomy\Models\Traits\HasTaxonomies;
 use Fomvasss\Taxonomy\Models\Traits\HasTaxonomyablesToMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Kalnoy\Nestedset\NodeTrait;
 
 class Term extends Model
 {
     use HasTaxonomies,
-        HasTaxonomyablesToMany;
+        HasTaxonomyablesToMany,
+        NodeTrait;
 
     protected $guarded = ['id'];
 
@@ -21,21 +22,23 @@ class Term extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function vocabulary()
+    public function txVocabulary()
     {
         $related = config('taxonomy.models.vocabulary', Vocabulary::class);
-        return $this->belongsTo($related);
+
+        return $this->belongsTo($related, 'vocabulary', 'system_name');
     }
 
     /**
      * Связь:
-     * Сущность текущей модели "держит" много термов
+     * Сущность текущей модели терм "держит" много термов
      *
      * @return $this
      */
     public function termsByMany()
     {
-        $related = config('taxonomy.models.term', Term::class);
+        $related = config('taxonomy.models.term', static::class);
+        
         return $this->morphedByMany($related, 'termable');
     }
 
@@ -48,6 +51,7 @@ class Term extends Model
     public function vocabulariesByMany()
     {
         $related = config('taxonomy.models.vocabulary', Vocabulary::class);
+        
         return $this->morphedByMany($related, 'termable');
     }
 
@@ -59,15 +63,9 @@ class Term extends Model
      * @param string|null $vocabularyKey
      * @return mixed
      */
-    public function scopeByVocabulary($query, $vocabulary, string $vocabularyKey = 'system_name')
+    public function scopeByVocabulary($query, $vocabulary)
     {
-        if ($vocabularyKey == 'id') {
-            return $query->where('vocabulary_id', $vocabulary);
-        }
-
-        return $query->whereHas('vocabulary', function ($q) use ($vocabulary, $vocabularyKey) {
-            $q->where($vocabularyKey, $vocabulary);
-        });
+        return $query->where('vocabulary', $vocabulary);
     }
 
     /**

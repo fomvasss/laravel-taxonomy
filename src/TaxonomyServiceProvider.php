@@ -13,13 +13,13 @@ class TaxonomyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishedConfig();
+        $this->publishConfig();
 
-        $this->makeMigrations();
+        $this->publishMigrations();
 
-        $this->makeSeeder();
+        $this->publishSeeder();
 
-        $this->makeModels();
+        $this->overrideModels();
     }
 
     /**
@@ -32,20 +32,20 @@ class TaxonomyServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/taxonomy.php', 'taxonomy');
     }
 
-    protected function publishedConfig()
+    protected function publishConfig()
     {
         $this->publishes([__DIR__ . '/../config/taxonomy.php' => config_path('taxonomy.php')
         ], 'taxonomy-config');
     }
 
-    protected function makeSeeder()
+    protected function publishSeeder()
     {
-        $seedPath = __DIR__ . '/../database/seeds/TaxonomyTableSeeder.php.stub';
+        $seedPath = __DIR__ . '/../database/seeds/TaxonomyTableSeeder.php.stub.php';
         $this->publishes([$seedPath => database_path('seeds/TaxonomyTableSeeder.php')
             ], 'taxonomy-seeder');
     }
 
-    protected function makeMigrations()
+    protected function publishMigrations()
     {
         if (! class_exists('CreateTaxonomiesTable')) {
             $timestamp = date('Y_m_d_His', time());
@@ -56,7 +56,7 @@ class TaxonomyServiceProvider extends ServiceProvider
         }
     }
 
-    protected function makeModels()
+    protected function overrideModels()
     {
         $modelPathStub = __DIR__.'/stubs/models/';
         $modelPath = $this->checkMakeDir(app_path('Models/Taxonomies')) . '/';

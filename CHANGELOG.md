@@ -1,5 +1,12 @@
 # Changelog LaravelTaxonomy
 
+## 3.0.0 - 2018-10-28
+
+- Updated relation term with vocabulary
+- Updated DB table fields
+- Added in require `lazychaser/laravel-nestedset` (`kalnoy/laravel-nestedset`) to manage tree taxonomy terms 
+- Update docs
+
 ## 2.1.0 - 2018-07-07
 
 - Remove Softdelete trait in taxonomy models & softdelete field in dbtables
