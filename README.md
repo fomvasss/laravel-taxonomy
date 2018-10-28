@@ -12,7 +12,7 @@
 
 Запустить:
 ```bash
-	composer require fomvasss/laravel-taxonomy
+composer require fomvasss/laravel-taxonomy
 ```
 
 Для Laravel < 5.5 добавить в сервис-провайдер в `app.php`:
@@ -27,7 +27,7 @@
 ### Публикация ресурсов
 
 ```bash
-	php artisan vendor:publish --provider="Fomvasss\Taxonomy\TaxonomyServiceProvider"
+php artisan vendor:publish --provider="Fomvasss\Taxonomy\TaxonomyServiceProvider"
 ```
 
 После публикации ресурсов, вы можете изменить миграцию, сид и переопределить модели термов или словарей.
@@ -40,23 +40,22 @@ composer dump-autoload
 и
 
 ```bash
-	php artisan migrate
-	php artisan db:seed --class=TaxonomyTableSeeder
+php artisan migrate
+php artisan db:seed --class=TaxonomyTableSeeder
 ```
 
 > При использовании собственных (переопределенных) моделей терминов и словарей, нужно указать в конфигу `taxonomy.php` пути этих моделей, иначе система будет работать не так как вы планируете!
 
----
+
 ## Использование
 
----
 ### Использование в своих моделях
 
-> Для использование в ваших моделях таксономии нужно подключить трейт `HasTaxonomies` в котором есть методы и скопы:
+> Для использование в ваших моделях таксономии нужно подключить трейт `HasTaxonomies` в котором есть relation methods & scope`s:
 
 #### Связи
 
-- termsByVocabulary() - Связь текущей модели с термамы по указанному словарю (по умолчанию `system_name`) - используется для создание связей с термамы нужного словаря в своих моделях
+- termsByVocabulary() - Связь текущей модели с термамы по указанному словарю (по `system_name`) - используется для создание связей с термамы нужного словаря в своих моделях
 
 - terms() - Сущность текущей модели "относится" к разным термам (полиморфизм)
 
@@ -64,45 +63,49 @@ composer dump-autoload
 
 #### Scopes
 
-- termsByVocabulary() - Термы текущей модели по указанному словарю (по умолчанию ключ `system_name`). Не путать с связью `termsByVocabulary()`!
+- termsByVocabulary() - Термы текущей модели по указанному словарю (по `system_name`). Не путать с связью `termsByVocabulary()`!
 
-- byTaxonomies() - Сущности по указанным термам с соответствующих указанных словарей (ключи по умолчанию term = `id`, vocabulary = `system_name`)
+- byTaxonomies() - Сущности по указанным термам с соответствующих указанных словарей (ключи по умолчанию: `vocabulary.system_name`, `term.id`)
 
-Можно создавать в своих моделях свои, более удобные методы для связей, на основе метода `terms()`. 
+Можно создавать в своих моделях свои, более удобные, методы для связей, на основе метода `terms()`. 
 
-Например: модель статьи (Article) относится к термам-категориям (Term) со словаря (Vocabulary) "Категории статей" (vocabularies.id = 1, vocabularies.system_name=article_categories) то метод связи между статьей и ее категориями можно назвать "txArticleCategories" и записать как:
+Например: модель статьи `Article` относится к термам-категориям `Term` со словаря (`Vocabulary`) "Категории статей" (`vocabularies.id` = 1, `vocabularies.system_name` = "article_categories") то метод связи между статьей и ее категориями можно назвать "txArticleCategories" и записать как:
 
 ```php
-    public function txArticleCategories()
-    {
-        $vocabularyArticleCategory = 1;
-        return $this->terms()->where('vocabulary_id', $vocabularyCategory);
-    }
+public function txArticleCategories()
+{
+    $vocabularyArticleCategory = 1;
+    return $this->terms()->where('vocabulary_id', $vocabularyCategory);
+}
 ```
 
 Или, еще более удобно записать связь используя метод `termsByVocabulary()` и указывая системное имя нужного словаря:
+
 ```php
-    public function txArticleCategories()
-    {
-        return $this->termsByVocabulary('article_categories');
-    }
+public function txArticleCategories()
+{
+    return $this->termsByVocabulary('article_categories');
+}
 ```
 
-Например, если этот метод использовать в модели Article, то он описывает связь статьи с категориямы.
+> В ваших методах, для связей с таксономией (термины, словари), рекомендуется использовать как стандарт префикс "tx" (`txArticleCategories`, `txArticleStatus`, `txRegion`,...)
+
+Например, если метод `txArticleCategories()` использовать в модели `Article`, то он описывает связь статьи с категориямы.
+
 Все категории статьи можно получить:
 ```php
 $article = Models\Article::first()->txArticleCategories;
 ```
 
-Аналогично, можно использовать метод `term()` в вашей модели. Например, опишем связь статьи со статусом статьи,
-при этом укажем поля для связей статуса со статтей (если использова `id` - то поля указывать не обязательно):
+Аналогично, можно использовать метод `term()` в вашей модели. Например, опишем связь статьи с моделью - статусом статьи,
+при этом укажем поля для связей модели статуса с самой статтей (если использовать `id` - то поля указывать не обязательно):
 
 ```php
-    public function txArticleStatus()
-    {
-        return $this->term('status', 'system_name')
-            ->where('vocabulary', 'article_statuses');
-    }
+public function txArticleStatus()
+{
+    return $this->term('status', 'system_name')
+        ->where('vocabulary', 'article_statuses');
+}
 ```
 
 - `txArticleStatus` - название метода для связи сущности со статусом (можно любое, по правилам Laravel)
@@ -111,7 +114,7 @@ $article = Models\Article::first()->txArticleCategories;
 - `vocabulary` - поле в таблице термов, в котором записано систимное название словаря (`terms.vocabulary`)
 - `article_statuses` - название словаря, записанное в таблице термов (`terms.vocabulary`)
 
-Например, если этот метод использовать в сущности модели Article, то он описывает статус статьи.
+Например, если метод `txArticleStatus()` использовать в сущности модели `Article`, то он описывает статус статьи.
 
 Данные терма-статуса, например имя статуса, можно получить:
 ```php
@@ -121,10 +124,10 @@ $article->txArticleStatus->name;
 
 В переопределенной модели `Term` вы можете описать метод, для получения всех статтей выбранной категории:
 ```php
-    public function articles()
-    {
-        return $this->morphedByMany(Article::class, 'termable');
-    }
+public function articles()
+{
+    return $this->morphedByMany(Article::class, 'termable');
+}
 ```
 И использовате его:
 ```$xslt
@@ -168,28 +171,32 @@ byVocabulary() - Все термы по указанному словарю
 ## Еще примеры использования:
 
 ```php
-	App\Models\Term::find(1)->vocabulary; // system name vocabulary
-	App\Models\Term::find(1)->txVocabulary; // model vocabulary
-	
-	App\Models\Term::byVocabulary('article_categories')->get();
+App\Models\Term::find(1)->vocabulary; // system name vocabulary
 
-	App\Models\Term::byVocabulary("article_categories")->get()->toTree(); // метод с пакета `lazychaser/laravel-nestedset`
-	App\Models\Term::find(1)->descendants; // метод с пакета `lazychaser/laravel-nestedset`
-	
-	App\Models\Article::with('txArticleCategories')->get();
-	
-	App\Models\Article::first()->txArticleCategories()->attach([1, 2]);
-	
-	App\Models\Article::first()->txArticleCategories()->sync([4, 2]); // !!! то же самое что и:
-    App\Models\Article::first()->terms()->sync([4, 2]);
-    App\Models\Article::first()->terms()->detach([4]);
-    
-    App\Models\Article::first()->txArticleCategories()->syncWithoutDetaching([4, 2]); // синхронизации термов без отсоеденения
+App\Models\Term::find(1)->txVocabulary; // model vocabulary
 
-	App\Models\Article::byTaxonomies([
-		'article_categories' => [1,3,5],
-		'cities' => [3]
-	])->get();
+App\Models\Term::byVocabulary('article_categories')->get();
+
+App\Models\Term::byVocabulary("article_categories")->get()->toTree(); // метод с пакета `lazychaser/laravel-nestedset`
+
+App\Models\Term::find(1)->descendants; // метод с пакета `lazychaser/laravel-nestedset`
+
+App\Models\Article::with('txArticleCategories')->get();
+
+App\Models\Article::first()->txArticleCategories()->attach([1, 2]);
+
+App\Models\Article::first()->txArticleCategories()->sync([4, 2]); // !!! то же самое что и:
+
+App\Models\Article::first()->terms()->sync([4, 2]);
+
+App\Models\Article::first()->terms()->detach([4]);
+
+App\Models\Article::first()->txArticleCategories()->syncWithoutDetaching([4, 2]); // синхронизации термов без отсоеденения
+
+App\Models\Article::byTaxonomies([
+    'article_categories' => [1,3,5],
+    'cities' => [3]
+])->get();
 ```
 
 ## Links
