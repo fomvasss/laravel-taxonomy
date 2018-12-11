@@ -15,7 +15,7 @@
 composer require fomvasss/laravel-taxonomy
 ```
 
-Для Laravel < 5.5 добавить в сервис-провайдер в `app.php`:
+Для Laravel < 5.5 добавить в сервис-провайдер в `config/app.php`:
 
 ```php
 'providers' => [
@@ -29,12 +29,10 @@ composer require fomvasss/laravel-taxonomy
 ```bash
 php artisan vendor:publish --provider="Fomvasss\Taxonomy\TaxonomyServiceProvider"
 ```
+После публикации ресурсов, вы можете изменить файл миграции, сид и переопределить модели термов и словарей.
 
-После публикации ресурсов, вы можете изменить миграцию, сид и переопределить модели термов или словарей.
-
-После этого запустити:
-
-```$xslt
+Запустити:
+```bash
 composer dump-autoload
 ```
 и
@@ -46,7 +44,6 @@ php artisan db:seed --class=TaxonomyTableSeeder
 
 > При использовании собственных (переопределенных) моделей терминов и словарей, нужно указать в конфигу `taxonomy.php` пути этих моделей, иначе система будет работать не так как вы планируете!
 
-
 ## Использование
 
 ### Использование в своих моделях
@@ -56,30 +53,19 @@ php artisan db:seed --class=TaxonomyTableSeeder
 #### Связи
 
 - termsByVocabulary() - Связь текущей модели с термамы по указанному словарю (по `system_name`) - используется для создание связей с термамы нужного словаря в своих моделях
-
 - terms() - Сущность текущей модели "относится" к разным термам (полиморфизм)
-
 - term() - Сущность имеет один терм (ключ для связи создается в таблице текущей сущности)
 
 #### Scopes
 
 - termsByVocabulary() - Термы текущей модели по указанному словарю (по `system_name`). Не путать с связью `termsByVocabulary()`!
-
 - byTaxonomies() - Сущности по указанным термам с соответствующих указанных словарей (ключи по умолчанию: `vocabulary.system_name`, `term.id`)
 
-Можно создавать в своих моделях свои, более удобные, методы для связей, на основе метода `terms()`. 
+Можно создавать в своих моделях свои, более удобные, методы для связей, на основе метода-связи `terms()`. 
 
-Например: модель статьи `Article` относится к термам-категориям `Term` со словаря (`Vocabulary`) "Категории статей" (`vocabularies.id` = 1, `vocabularies.system_name` = "article_categories") то метод связи между статьей и ее категориями можно назвать "txArticleCategories" и записать как:
+Например: модель статьи `Article` относится к термам-категориям `Term` со словаря (`Vocabulary`) "Категории статей" (`vocabularies.id` = 1, `vocabularies.system_name` = "article_categories") то метод связи между статьей и ее категориями можно назвать `txArticleCategories` и записать как:
 
-```php
-public function txArticleCategories()
-{
-    $vocabularyArticleCategory = 1;
-    return $this->terms()->where('vocabulary_id', $vocabularyCategory);
-}
-```
-
-Или, еще более удобно записать связь используя метод `termsByVocabulary()` и указывая системное имя нужного словаря:
+> Удобно строить связь используя метод `termsByVocabulary()` и указывая системное имя нужного словаря:
 
 ```php
 public function txArticleCategories()
@@ -88,7 +74,7 @@ public function txArticleCategories()
 }
 ```
 
-> В ваших методах, для связей с таксономией (термины, словари), рекомендуется использовать как стандарт префикс "tx" (`txArticleCategories`, `txArticleStatus`, `txRegion`,...)
+> В ваших методах, для связей с таксономией (термины, словари), рекомендуется использовать как стандарт префикс "tx" (`txArticleCategories`, `txArticleStatus`, `txBrands` `txRegion`,...)
 
 Например, если метод `txArticleCategories()` использовать в модели `Article`, то он описывает связь статьи с категориямы.
 
@@ -97,8 +83,8 @@ public function txArticleCategories()
 $article = Models\Article::first()->txArticleCategories;
 ```
 
-Аналогично, можно использовать метод `term()` в вашей модели. Например, опишем связь статьи с моделью - статусом статьи,
-при этом укажем поля для связей модели статуса с самой статтей (если использовать `id` - то поля указывать не обязательно):
+Аналогично, можно использовать метод `term()` в вашей модели. Например, опишем связь статьи с термом словаря статусов модерации статьи,
+при этом укажем поля для связей модели терма-статуса с самой моделью статьи:
 
 ```php
 public function txArticleStatus()
@@ -107,14 +93,13 @@ public function txArticleStatus()
         ->where('vocabulary', 'article_statuses');
 }
 ```
-
 - `txArticleStatus` - название метода для связи сущности со статусом (можно любое, по правилам Laravel)
 - `status` - поле в таблице текущой сущности (статьи), где хранится статус, через которое и установленная связь с термом (`articles.status`)
 - `system_name` - поле в таблице термов (в нашем случае записано системное имя статуса) (`terms.system_name`)
 - `vocabulary` - поле в таблице термов, в котором записано систимное название словаря (`terms.vocabulary`)
 - `article_statuses` - название словаря, записанное в таблице термов (`terms.vocabulary`)
 
-Например, если метод `txArticleStatus()` использовать в сущности модели `Article`, то он описывает статус статьи.
+Например, если метод `txArticleStatus()` использовать в модели `Article`, то он описывает статус статьи.
 
 Данные терма-статуса, например имя статуса, можно получить:
 ```php
@@ -122,7 +107,7 @@ $article = Models\Article::first();
 $article->txArticleStatus->name;
 ```
 
-В переопределенной модели `Term` вы можете описать метод, для получения всех статтей выбранной категории:
+В переопределенной модели `Term` вы можете описать метод, для получения всех статтей по терму-категории:
 ```php
 public function articles()
 {
@@ -130,8 +115,8 @@ public function articles()
 }
 ```
 И использовате его:
-```$xslt
-    Term::findOrFail(13)->articles
+```php
+    Term::byVocabulary('article_categories')->first(13)->articles
 ```
 
 
@@ -140,7 +125,7 @@ public function articles()
 #### Связи
 - terms() - Словарь имет много термов
 
-#### Полиморные связи
+#### Полиморфные связи
 - vocabulariesByMany() - Сущность текущей модели "держит" много словарей
 - vocabulariesToMany() - Сущность текущей модели "относится" к разным словарям
 - termsByMany() - Сущность текущей модели "держит" много термов
@@ -152,7 +137,7 @@ public function articles()
 #### Связи
 - txVocabulary() - Терм "пренадлежит" одному словарю
 
-#### Полиморные связи
+#### Полиморфные связи
 - vocabulariesByMany() - Сущность текущей модели "держит" много словарей
 - vocabulariesToMany() - Сущность текущей модели "относится" к разным словарям
 - termsByMany() - Сущность текущей модели "держит" много термов
@@ -162,45 +147,42 @@ public function articles()
 byVocabulary() - Все термы по указанному словарю
 
 #### Работа с иерархией в терминах таксономии (рекомендации)
-
 - Работа с иерархией в этом пакете построена на ["laravel-nestedset"](https://github.com/lazychaser/laravel-nestedset)
-
 - Для моделей термов доступные все методы пакета `laravel-nestedset`.
 
 ---
+
 ## Еще примеры использования:
-
 ```php
-App\Models\Term::find(1)->vocabulary; // system name vocabulary
+App\Models\Term::find(1)->vocabulary; // get system name vocabulary
 
-App\Models\Term::find(1)->txVocabulary; // model vocabulary
+App\Models\Term::find(1)->txVocabulary; // get related model vocabulary
 
-App\Models\Term::byVocabulary('article_categories')->get();
+App\Models\Term::byVocabulary('article_categories')->get(); // get terms by system name vocabulary
 
-App\Models\Term::byVocabulary("article_categories")->get()->toTree(); // метод с пакета `lazychaser/laravel-nestedset`
+App\Models\Term::byVocabulary('article_categories')->get()->toTree(); // `toTree` - method from package `lazychaser/laravel-nestedset`
 
-App\Models\Term::find(1)->descendants; // метод с пакета `lazychaser/laravel-nestedset`
+App\Models\Term::find(1)->descendants; // `descendants` - method from package `lazychaser/laravel-nestedset`
 
-App\Models\Article::with('txArticleCategories')->get();
+App\Models\Article::with('txArticleCategories')->get(); // get articles with article categories
 
 App\Models\Article::first()->txArticleCategories()->attach([1, 2]);
 
-App\Models\Article::first()->txArticleCategories()->sync([4, 2]); // !!! то же самое что и:
+App\Models\Article::first()->txArticleCategories()->sync([4, 2]); // this detach all terms in article and sync 4 ,2!!! Same as:
 
 App\Models\Article::first()->terms()->sync([4, 2]);
 
 App\Models\Article::first()->terms()->detach([4]);
 
-App\Models\Article::first()->txArticleCategories()->syncWithoutDetaching([4, 2]); // синхронизации термов без отсоеденения
+App\Models\Article::first()->txArticleCategories()->syncWithoutDetaching([4, 2]); // sync terms without detaching
 
 App\Models\Article::byTaxonomies([
     'article_categories' => [1,3,5],
     'cities' => [3]
-])->get();
+])->get(); // use for example for filters
 ```
 
 ## Links
-
 * [https://github.com/lazychaser/laravel-nestedset](https://github.com/lazychaser/laravel-nestedset)
 * [https://en.wikipedia.org/wiki/Taxonomy_(general)](https://en.wikipedia.org/wiki/Taxonomy_(general))
 * [https://en.wikipedia.org/wiki/Nesting_(computing)](https://en.wikipedia.org/wiki/Nesting_(computing))
