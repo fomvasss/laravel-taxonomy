@@ -50,18 +50,18 @@ class TaxonomyServiceProvider extends ServiceProvider
         if (! class_exists('CreateTaxonomiesTable')) {
             $timestamp = date('Y_m_d_His', time());
 
-            $migrationPath = __DIR__.'/../database/migrations/create_taxonomies_table.php';
-            $this->publishes([$migrationPath => database_path('/migrations/' . $timestamp . '_create_taxonomies_table.php'),
+            $migrationPath = __DIR__.'/../database/migrations/create_taxonomy_tables.php';
+            $this->publishes([$migrationPath => database_path('/migrations/' . $timestamp . '_create_taxonomy_tables.php'),
                 ], 'taxonomy-migrations');
         }
     }
 
     protected function overrideModels()
     {
-        $modelPathStub = __DIR__.'/stubs/models/';
-        $modelPath = $this->checkMakeDir(app_path('Models/Taxonomies')) . '/';
+        if (! class_exists('App\Models\Term\Taxonomy') || ! class_exists('App\Models\Vocabulary\Taxonomy')) {
+            $modelPathStub = __DIR__.'/stubs/models/';
+            $modelPath = $this->checkMakeDir(app_path('Models/Taxonomy')) . '/';
 
-        if (! class_exists('App\Models\Term\Taxonomies') || ! class_exists('App\Models\Vocabulary\Taxonomies')) {
             $this->publishes([
                 $modelPathStub . 'Term.php.stub' => $modelPath . 'Term.php',
                 $modelPathStub . 'Vocabulary.php.stub' => $modelPath . 'Vocabulary.php',
