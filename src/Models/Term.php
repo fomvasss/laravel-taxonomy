@@ -15,6 +15,10 @@ class Term extends Model
         NodeTrait;
 
     protected $guarded = ['id'];
+    
+    protected $casts = [
+        'options' => 'array',
+    ];
 
     /**
      * Связь:
@@ -66,20 +70,5 @@ class Term extends Model
     public function scopeByVocabulary($query, $vocabulary)
     {
         return $query->where('vocabulary', $vocabulary);
-    }
-
-    /**
-     * TODO пример!
-     *
-     * Связь:
-     * Терм "держит" много статтей
-     * Получить список статтей
-     * Методы описываются в переопределенной модели Term!
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function postsExample()
-    {
-        return $this->morphedByMany(PostExample::class, 'termable');
     }
 }
