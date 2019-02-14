@@ -6,7 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/fomvasss/laravel-taxonomy.svg?style=for-the-badge)](https://packagist.org/packages/fomvasss/laravel-taxonomy)
 [![Quality Score](https://img.shields.io/scrutinizer/g/fomvasss/laravel-taxonomy.svg?style=for-the-badge)](https://scrutinizer-ci.com/g/fomvasss/laravel-taxonomy)
 
-Создание и управление терминамы таксономи в Laravel Eloquent для категоризации материалов.
+Создание и управление терминамы таксономии (категориямы) в Laravel Eloquent.
 
 ## Установка
 
@@ -31,7 +31,7 @@ php artisan vendor:publish --provider="Fomvasss\Taxonomy\TaxonomyServiceProvider
 ```
 После публикации ресурсов, вы можете изменить файл миграции, сид и переопределить модели термов и словарей.
 
-Запустити:
+Запустить:
 ```bash
 composer dump-autoload
 ```
@@ -103,7 +103,7 @@ public function txArticleStatus()
 
 Данные терма-статуса, например имя статуса, можно получить:
 ```php
-$article = Models\Article::first();
+$article = \App\Models\Article::first();
 $article->txArticleStatus->name;
 ```
 
@@ -154,29 +154,29 @@ byVocabulary() - Все термы по указанному словарю
 
 ## Еще примеры использования:
 ```php
-App\Models\Term::find(1)->vocabulary; // get system name vocabulary
+\App\Models\Taxonomy\Term::find(1)->vocabulary; // get system name vocabulary
 
-App\Models\Term::find(1)->txVocabulary; // get related model vocabulary
+\App\Models\Taxonomy\Term::find(1)->txVocabulary; // get related model vocabulary
 
-App\Models\Term::byVocabulary('article_categories')->get(); // get terms by system name vocabulary
+\App\Models\Taxonomy\Term::byVocabulary('article_categories')->get(); // get terms by system name vocabulary
 
-App\Models\Term::byVocabulary('article_categories')->get()->toTree(); // `toTree` - method from package `lazychaser/laravel-nestedset`
+\App\Models\Taxonomy\Term::byVocabulary('article_categories')->get()->toTree(); // `toTree` - method from package `lazychaser/laravel-nestedset`
 
-App\Models\Term::find(1)->descendants; // `descendants` - method from package `lazychaser/laravel-nestedset`
+\App\Models\Taxonomy\Term::find(1)->descendants; // `descendants` - method from package `lazychaser/laravel-nestedset`
 
-App\Models\Article::with('txArticleCategories')->get(); // get articles with article categories
+\App\Models\Article::with('txArticleCategories')->get(); // get articles with article categories
 
-App\Models\Article::first()->txArticleCategories()->attach([1, 2]);
+\App\Models\Article::first()->txArticleCategories()->attach([1, 2]);
 
-App\Models\Article::first()->txArticleCategories()->sync([4, 2]); // this detach all terms in article and sync 4 ,2!!! Same as:
+\App\Models\Article::first()->txArticleCategories()->sync([4, 2]); // this detach all terms in article and sync 4 ,2!!! Same as:
 
-App\Models\Article::first()->terms()->sync([4, 2]);
+\App\Models\Article::first()->terms()->sync([4, 2]);
 
-App\Models\Article::first()->terms()->detach([4]);
+\App\Models\Article::first()->terms()->detach([4]);
 
-App\Models\Article::first()->txArticleCategories()->syncWithoutDetaching([4, 2]); // sync terms without detaching
+\App\Models\Article::first()->txArticleCategories()->syncWithoutDetaching([4, 2]); // sync terms without detaching
 
-App\Models\Article::byTaxonomies([
+\App\Models\Article::byTaxonomies([
     'article_categories' => [1,3,5],
     'cities' => [3]
 ])->get(); // use for example for filters
