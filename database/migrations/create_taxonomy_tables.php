@@ -32,7 +32,7 @@ class CreateTaxonomyTables extends Migration
             $table->string('system_name')->unique();
             $table->string('name');
             $table->text('description')->nullable();
-            // $table->json('options')->nullable(); // optional, if needed
+            // $table->json('data')->nullable(); // optional, if needed
         });
     }
 
@@ -54,7 +54,7 @@ class CreateTaxonomyTables extends Migration
 
             $table->integer('weight')->default(0);
             $table->string('vocabulary');
-            // $table->json('options')->nullable(); // optional, if needed
+            // $table->json('data')->nullable(); // optional, if needed
             $table->timestamps();
         });
     }

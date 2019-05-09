@@ -21,8 +21,8 @@
     "license": "MIT",
     "require": {
         "php" : ">=7.0.0",
-        "illuminate/support": "5.5.*|5.6.*|5.7.*",
-        "illuminate/database": "5.5.*|5.6.*|5.7.*",
+        "illuminate/support": "5.5.*|5.6.*|5.7.*|5.8.*",
+        "illuminate/database": "5.5.*|5.6.*|5.7.*|5.8.*",
         "kalnoy/nestedset": "^4.3"
     },
     "autoload": {

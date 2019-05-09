@@ -1,5 +1,9 @@
 # Changelog LaravelTaxonomy
 
+## 3.2.0 - 2019-05-09
+
+- Support Laravel 5.8
+
 ## 3.0.2 - 2018-12-11
 
 - Updated migration

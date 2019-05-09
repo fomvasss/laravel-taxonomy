@@ -17,7 +17,7 @@ class Term extends Model
     protected $guarded = ['id'];
     
     protected $casts = [
-        'options' => 'array',
+        'data' => 'array',
     ];
 
     /**
