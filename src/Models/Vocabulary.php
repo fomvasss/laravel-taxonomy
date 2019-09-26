@@ -15,7 +15,7 @@ class Vocabulary extends Model
     public $timestamps = false;
 
     protected $casts = [
-        'data' => 'array',
+        'options' => 'array',
     ];
 
     /**

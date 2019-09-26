@@ -1,5 +1,11 @@
 # Changelog LaravelTaxonomy
 
+## 4.0.0 - 2019-09-26
+
+- Support Laravel 6
+- Require "kalnoy/nestedset:^5
+- Rename json field `data` => `options`
+
 ## 3.2.0 - 2019-05-09
 
 - Support Laravel 5.8

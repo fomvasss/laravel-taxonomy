@@ -32,7 +32,7 @@ class CreateTaxonomyTables extends Migration
             $table->string('system_name')->unique();
             $table->string('name');
             $table->text('description')->nullable();
-            // $table->json('data')->nullable(); // optional, if needed
+            // $table->json('options')->nullable(); // optional
         });
     }
 
@@ -47,14 +47,14 @@ class CreateTaxonomyTables extends Migration
             $table->string('system_name')->nullable()->unique(); // optional
             $table->text('description')->nullable();
             
-            // Nested https://github.com/lazychaser/laravel-nestedset - $table->nestedSet();
+            // Nested https://github.com/lazychaser/laravel-nestedset
             $table->unsignedInteger('_lft')->default(0);
             $table->unsignedInteger('_rgt')->default(0);
             $table->unsignedInteger('parent_id')->nullable();
 
             $table->integer('weight')->default(0);
             $table->string('vocabulary');
-            // $table->json('data')->nullable(); // optional, if needed
+            // $table->json('options')->nullable(); // optional
             $table->timestamps();
         });
     }
