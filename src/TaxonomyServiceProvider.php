@@ -34,15 +34,16 @@ class TaxonomyServiceProvider extends ServiceProvider
 
     protected function publishConfig()
     {
-        $this->publishes([__DIR__ . '/../config/taxonomy.php' => config_path('taxonomy.php')
+        $this->publishes([
+            __DIR__ . '/../config/taxonomy.php' => config_path('taxonomy.php')
         ], 'taxonomy-config');
     }
 
     protected function publishSeeder()
     {
-        $seedPath = __DIR__ . '/../database/seeds/TaxonomyTableSeeder.php.stub.php';
-        $this->publishes([$seedPath => database_path('seeds/TaxonomyTableSeeder.php')
-            ], 'taxonomy-seeder');
+        $this->publishes([
+            __DIR__ . '/../database/seeds/TaxonomyTableSeeder.php.stub' => database_path('seeds/TaxonomyTableSeeder.php')
+        ], 'taxonomy-seeder');
     }
 
     protected function publishMigrations()
@@ -50,9 +51,9 @@ class TaxonomyServiceProvider extends ServiceProvider
         if (! class_exists('CreateTaxonomiesTable')) {
             $timestamp = date('Y_m_d_His', time());
 
-            $migrationPath = __DIR__.'/../database/migrations/create_taxonomy_tables.php';
-            $this->publishes([$migrationPath => database_path('/migrations/' . $timestamp . '_create_taxonomy_tables.php'),
-                ], 'taxonomy-migrations');
+            $this->publishes([
+                __DIR__.'/../database/migrations/create_taxonomy_tables.php' => database_path('/migrations/' . $timestamp . '_create_taxonomy_tables.php'),
+            ], 'taxonomy-migrations');
         }
     }
 
