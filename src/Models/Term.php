@@ -15,10 +15,6 @@ class Term extends Model
         NodeTrait;
 
     protected $guarded = ['id'];
-    
-    protected $casts = [
-        //'options' => 'array',
-    ];
 
     /**
      * Связь:

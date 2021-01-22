@@ -45,6 +45,7 @@ class CreateTaxonomyTables extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('system_name')->nullable()->unique();
+            // $table->string('slug')->nullable()->unique();
             $table->text('description')->nullable();
             
             // Nested https://github.com/lazychaser/laravel-nestedset

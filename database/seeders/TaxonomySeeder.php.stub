@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class TaxonomySeeder extends Seeder
 {
@@ -161,6 +162,7 @@ class TaxonomySeeder extends Seeder
             ], [
                 'name' => $item['name'],
                 'description' => $item['description'] ?? null,
+                'has_hierarchy' => $item['has_hierarchy'] ?? 0,
             ]);
             $this->command->info("Vocabulary saved: $vocabulary->name ($vocabulary->id)");
 
@@ -179,13 +181,18 @@ class TaxonomySeeder extends Seeder
     {
         foreach ($terms as $item) {
             $term = $this->termModel::updateOrCreate([
-                'name' => $item['name'], // TODO: For this test name is unique !!!
-            ], [
-                'system_name' => isset($item['system_name']) ? str_slug($item['system_name'], '_') : null,
-                'description' => $item['description'] ?? null,
-                'vocabulary' => $vocabulary->system_name,
-                'parent_id' => $parent_id,
-            ]);
+                    'name' => $item['name'], // TODO: For this test name is unique !!!
+                ], [
+                    'system_name' => isset($item['system_name'])
+                        ? Str::slug($item['system_name'], '_')
+                        : null,
+    //                'slug' => isset($item['slug'])
+    //                    ? Str::slug($item['slug'], '-')
+    //                    : Str::slug($item['name'], '-'),
+                    'description' => $item['description'] ?? null,
+                    'vocabulary' => $vocabulary->system_name,
+                    'parent_id' => $parent_id,
+                ]);
 
             $this->command->info(" - Term saved: $term->name ($term->id)");
 

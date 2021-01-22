@@ -4,6 +4,25 @@ namespace App\Models\Taxonomy;
 
 class Term extends \Fomvasss\Taxonomy\Models\Term
 {
+
+    protected $casts = [
+        //'options' => 'array',
+    ];
+
+    protected $attributes = [
+        'weight' => 1000,
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('weight', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            $builder->orderBy('weight', 'asc')
+                ->orderBy('id', 'asc');
+        });
+    }
+
     /**
      * It example you can delete :)
      * Relation - Therm has many articles
