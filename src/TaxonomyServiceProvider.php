@@ -36,14 +36,14 @@ class TaxonomyServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../config/taxonomy.php' => config_path('taxonomy.php')
-        ], 'taxonomy-config');
+        ], 'config');
     }
 
     protected function publishSeeder()
     {
         $this->publishes([
-            __DIR__ . '/../database/seeds/TaxonomyTableSeeder.php.stub' => database_path('seeds/TaxonomyTableSeeder.php')
-        ], 'taxonomy-seeder');
+            __DIR__ . '/../database/seeders/TaxonomySeeder.php.stub' => database_path('seeders/TaxonomySeeder.php')
+        ], 'seeder');
     }
 
     protected function publishMigrations()
@@ -53,7 +53,7 @@ class TaxonomyServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__.'/../database/migrations/create_taxonomy_tables.php' => database_path('/migrations/' . $timestamp . '_create_taxonomy_tables.php'),
-            ], 'taxonomy-migrations');
+            ], 'migrations');
         }
     }
 
@@ -66,7 +66,7 @@ class TaxonomyServiceProvider extends ServiceProvider
             $this->publishes([
                 $modelPathStub . 'Term.php.stub' => $modelPath . 'Term.php',
                 $modelPathStub . 'Vocabulary.php.stub' => $modelPath . 'Vocabulary.php',
-            ], 'taxonomy-models');
+            ], 'models');
         }
     }
 

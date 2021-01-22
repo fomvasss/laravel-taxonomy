@@ -1,19 +1,22 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
-class TaxonomyTableSeeder extends Seeder
+class TaxonomySeeder extends Seeder
 {
     protected $termModel;
 
     protected $vocabularyModel;
 
     /**
-     * TaxonomyTableSeeder constructor.
+     * TaxonomySeeder constructor.
      */
     public function __construct()
     {
         $this->termModel = config('taxonomy.models.term');
+
         $this->vocabularyModel = config('taxonomy.models.vocabulary');
     }
     

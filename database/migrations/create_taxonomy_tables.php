@@ -32,7 +32,7 @@ class CreateTaxonomyTables extends Migration
             $table->string('system_name')->unique();
             $table->string('name');
             $table->text('description')->nullable();
-            // $table->json('options')->nullable(); // optional
+            $table->unsignedBigInteger('has_hierarchy')->default(1);
         });
     }
 
@@ -44,7 +44,7 @@ class CreateTaxonomyTables extends Migration
         Schema::create('terms', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('system_name')->nullable()->unique(); // optional
+            $table->string('system_name')->nullable()->unique();
             $table->text('description')->nullable();
             
             // Nested https://github.com/lazychaser/laravel-nestedset
@@ -54,7 +54,7 @@ class CreateTaxonomyTables extends Migration
 
             $table->integer('weight')->default(0);
             $table->string('vocabulary');
-            // $table->json('options')->nullable(); // optional
+            // $table->json('options')->nullable();
             $table->timestamps();
         });
     }

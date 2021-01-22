@@ -6,39 +6,37 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/fomvasss/laravel-taxonomy.svg?style=for-the-badge)](https://packagist.org/packages/fomvasss/laravel-taxonomy)
 [![Quality Score](https://img.shields.io/scrutinizer/g/fomvasss/laravel-taxonomy.svg?style=for-the-badge)](https://scrutinizer-ci.com/g/fomvasss/laravel-taxonomy)
 
-Создание и управление терминамы таксономии (категориямы) в Laravel Eloquent.
+Create and manage taxonomy categories (terms) in Laravel Eloquent.
 
 ## Установка
 
-Запустить:
 ```bash
 composer require fomvasss/laravel-taxonomy
 ```
 
-### Публикация ресурсов
+### Publishing resources
 
 ```bash
 php artisan vendor:publish --provider="Fomvasss\Taxonomy\TaxonomyServiceProvider"
 ```
 
-После публикации ресурсов, вы можете изменить файл миграции, сид и переопределить Eloquent-модели термов, словарей.
+После публикации ресурсов, вы можете изменить файл миграции, seeder и переопределить Eloquent-модели термов, словарей.
 
-Запустить:
 ```bash
 composer dump-autoload
 php artisan migrate
-php artisan db:seed --class=TaxonomyTableSeeder
+php artisan db:seed --class=TaxonomySeeder
 ```
 
-> При использовании собственных (переопределенных) моделей терминов и словарей, нужно указать в конфигу `taxonomy.php` пути этих моделей, иначе система будет работать не так как вы планируете!
+> При использовании переопределенных классов моделей терминов и словарей, нужно указать в конфигу `taxonomy.php` пути этих моделей, иначе система будет работать не так как вы планируете!
 
-## Использование
+## Usage
 
-### Использование в собственных моделях
+### Usage in own models
 
 > Для использование в ваших моделях таксономии, нужно подключить трейт `HasTaxonomies` в котором есть relation methods & scope`s:
 
-#### Связи
+#### Relations
 
 - `termsByVocabulary()` - Связь текущей модели с термамы по указанному словарю (по `system_name`). Используется для создание связей с термамы нужного словаря в своих моделях
 - `terms()` - Сущность текущей модели "относится" к разным термам (полиморфизм), например: товар в магазине относится к разным категориям
