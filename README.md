@@ -1,3 +1,5 @@
+**Development and support of this package is discontinued! Use a better solution [fomvasss/laravel-simple-taxonomy](https://github.com/fomvasss/laravel-simple-taxonomy)**
+
 # Laravel Taxonomy
 
 [![License](https://img.shields.io/packagist/l/fomvasss/laravel-taxonomy.svg?style=for-the-badge)](https://packagist.org/packages/fomvasss/laravel-taxonomy)
